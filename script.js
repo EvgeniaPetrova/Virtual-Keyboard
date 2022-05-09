@@ -326,12 +326,18 @@ let textarea;
 function createKeyboard() {
   let container = document.createElement('container');
   container.classList.add('container');
+  let text = document.createElement('p');
+  text.innerText = 'Клавиатура создана в операционной системе Windows';
+  let text2 = document.createElement('p');
+  text2.innerText = 'Комбинация клавиш для переключения языка: левыe ctrl + alt';
   textarea = document.createElement('textarea');
   textarea.setAttribute('cols', 5);
   textarea.setAttribute('rows', 10);
   keyboard = document.createElement('div');
   keyboard.classList.add('keyboard');
   document.body.append(container);
+  container.append(text);
+  container.append(text2);
   container.append(textarea);
   container.append(keyboard);
   for (let i = 0; i < keys.length; i++) {
@@ -400,10 +406,35 @@ document.addEventListener('keydown', function(event) {
 keyboard.addEventListener('mousedown', function(event) {
   if (event.target.classList.contains("keyboard__key")) {
 event.target.classList.add('active');
+if (event.target.innerHTML.length == 1) {
 textarea.value += `${event.target.innerText}`;
 }
+  }
   })
   keyboard.addEventListener('mouseup', function(event) {
 event.target.classList.remove('active');
   })
 
+  document.addEventListener('keydown', function(event) {
+    if (event.code == 'CapsLock') {
+      for (let i = 0; i < keysArr.length; i++) {
+        if (keysArr[i].innerHTML.length == 1 && keysArr[i].innerHTML.toLowerCase() == keysArr[i].innerHTML) {
+        keysArr[i].innerHTML = keysArr[i].innerHTML.toUpperCase();
+        } else if (keysArr[i].innerHTML.length == 1 && keysArr[i].innerHTML.toUpperCase() == keysArr[i].innerHTML) {
+          keysArr[i].innerHTML = keysArr[i].innerHTML.toLowerCase();
+        }
+       };
+    }
+  })
+
+  keyboard.addEventListener('mousedown', function(event) {
+    if (event.target.id == 'CapsLock') {
+      for (let i = 0; i < keysArr.length; i++) {
+        if (keysArr[i].innerHTML.length == 1 && keysArr[i].innerHTML.toLowerCase() == keysArr[i].innerHTML) {
+        keysArr[i].innerHTML = keysArr[i].innerHTML.toUpperCase();
+        } else if (keysArr[i].innerHTML.length == 1 && keysArr[i].innerHTML.toUpperCase() == keysArr[i].innerHTML) {
+          keysArr[i].innerHTML = keysArr[i].innerHTML.toLowerCase();
+        }
+       };
+    }
+  });
