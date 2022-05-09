@@ -333,6 +333,7 @@ function createKeyboard() {
   textarea = document.createElement('textarea');
   textarea.setAttribute('cols', 5);
   textarea.setAttribute('rows', 10);
+  textarea.placeholder = 'Доброго времени суток! Буду очень благодарна, если вы проверите работу как можно позже, т.к. хотелось бы еще немного доделать. Спасибо за понимание:)';
   keyboard = document.createElement('div');
   keyboard.classList.add('keyboard');
   document.body.append(container);
