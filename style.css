@@ -46,11 +46,13 @@ textarea {
     align-items: center;
     justify-content: center;
     vertical-align: top;
+
 }
 .keyboard__key.active {
     background: rgba(6, 1, 5, 0.631);
     color:  #ff4d00;
-    border-radius: 8px;
+    border-radius: 10px;
+    transition: all 0.1s ease-in-out;
 }
 .keyboard__key:hover {
     background: rgba(6, 1, 5, 0.631);
