@@ -319,21 +319,20 @@ const keys = [
     eventKey: 'Ctrl',
     eventKeyEng: 'Ctrl',
   },
-]
+];
 let key;
 let keyboard;
 let textarea;
-function createKeyboard() {
-  let container = document.createElement('container');
+const createKeyboard = () => {
+  const container = document.createElement('container');
   container.classList.add('container');
-  let text = document.createElement('p');
+  const text = document.createElement('p');
   text.innerText = 'Клавиатура создана в операционной системе Windows';
-  let text2 = document.createElement('p');
+  const text2 = document.createElement('p');
   text2.innerText = 'Комбинация клавиш для переключения языка: левыe ctrl + alt';
   textarea = document.createElement('textarea');
   textarea.setAttribute('cols', 5);
   textarea.setAttribute('rows', 10);
-  textarea.placeholder = 'Доброго времени суток! Буду очень благодарна, если вы проверите работу как можно позже, т.к. хотелось бы еще немного доделать. Спасибо за понимание:)';
   keyboard = document.createElement('div');
   keyboard.classList.add('keyboard');
   document.body.append(container);
@@ -341,101 +340,89 @@ function createKeyboard() {
   container.append(text2);
   container.append(textarea);
   container.append(keyboard);
-  for (let i = 0; i < keys.length; i++) {
+  for (let i = 0; i < keys.length; i += 1) {
     key = document.createElement('div');
     key.classList.add('keyboard__key');
     key.id = keys[i].eventKode;
     key.innerHTML = keys[i].eventKeyEng;
     keyboard.append(key);
-    let br = document.createElement('br');
+    const br = document.createElement('br');
     switch (keys[i].eventKode) {
-        case 'Backspace':
-        case 'Enter':
+      case 'Backspace':
+      case 'Enter':
         key.classList.add('keyboard__key--wide');
         key.after(br);
         break;
-        case 'CapsLock':
-          key.classList.add('keyboard__key--wide');
-          break;
-        case 'Delete':
-          case 'ShiftRight':
+      case 'CapsLock':
+        key.classList.add('keyboard__key--wide');
+        break;
+      case 'Delete':
+      case 'ShiftRight':
         key.after(br);
         break;
-        case 'Space':
+      case 'Space':
         key.classList.add('keyboard__key--extra-wide');
         break;
+      default:
+        break;
     }
-}
-}
+  }
+};
 createKeyboard();
-
 const keysArr = document.querySelectorAll('.keyboard__key');
-
-document.addEventListener('keydown', function(event) {
-  for (let i = 0; i < keysArr.length; i++) {
-  if (event.code == keysArr[i].id) {
-    keysArr[i].classList.toggle('active');
+const keyAnimation = (event) => {
+  for (let i = 0; i < keysArr.length; i += 1) {
+    if (event.code === keysArr[i].id) {
+      textarea.focus();
+      keysArr[i].classList.toggle('active');
+    }
   }
-}
-});
-document.addEventListener('keyup', function(event) {
-  for (let i = 0; i < keysArr.length; i++) {
-  if (event.code == keysArr[i].id) {
-    keysArr[i].classList.toggle('active');
+  if (event.target.classList.contains('keyboard__key')) {
+    event.target.classList.toggle('active');
   }
-}
-});
-
+};
 let pressedKeys = [];
-document.addEventListener('keydown', function(event) {
+const changeLanguage = (event) => {
   pressedKeys.push(event.code);
   if (pressedKeys.includes('AltLeft') && pressedKeys.includes('ControlLeft')) {
-    if (keysArr[0].innerHTML == '`') {
-      for (let i = 0; i < keysArr.length; i++) {
-          keysArr[i].innerHTML = keys[i].eventKey;
-           };
-           pressedKeys = [];
+    if (keysArr[0].innerHTML === '`') {
+      for (let i = 0; i < keysArr.length; i += 1) {
+        keysArr[i].innerHTML = keys[i].eventKey;
+      }
+      pressedKeys = [];
     } else {
-      for (let i = 0; i < keysArr.length; i++) {
-            keysArr[i].innerHTML = keys[i].eventKeyEng;
-             };
-             pressedKeys = [];
+      for (let i = 0; i < keysArr.length; i += 1) {
+        keysArr[i].innerHTML = keys[i].eventKeyEng;
+      }
+      pressedKeys = [];
     }
-  } 
-  });
-
-keyboard.addEventListener('mousedown', function(event) {
-  if (event.target.classList.contains("keyboard__key")) {
-event.target.classList.add('active');
-if (event.target.innerHTML.length == 1) {
-textarea.value += `${event.target.innerText}`;
-}
   }
-  })
-  keyboard.addEventListener('mouseup', function(event) {
-event.target.classList.remove('active');
-  })
-
-  document.addEventListener('keydown', function(event) {
-    if (event.code == 'CapsLock') {
-      for (let i = 0; i < keysArr.length; i++) {
-        if (keysArr[i].innerHTML.length == 1 && keysArr[i].innerHTML.toLowerCase() == keysArr[i].innerHTML) {
+};
+const fillTextarea = (event) => {
+  if (event.target.innerHTML.length === 1 || event.target.id === 'Space') {
+    textarea.value += `${event.target.innerHTML}`;
+  } else if (event.target.id === 'Enter') {
+    textarea.value += '\n';
+  }
+};
+const changeRegister = (event) => {
+  if (event.code === 'CapsLock' || event.target.id === 'CapsLock') {
+    for (let i = 0; i < keysArr.length; i += 1) {
+      if (keysArr[i].innerHTML.length === 1
+        && keysArr[i].innerHTML.toLowerCase() === keysArr[i].innerHTML) {
         keysArr[i].innerHTML = keysArr[i].innerHTML.toUpperCase();
-        } else if (keysArr[i].innerHTML.length == 1 && keysArr[i].innerHTML.toUpperCase() == keysArr[i].innerHTML) {
-          keysArr[i].innerHTML = keysArr[i].innerHTML.toLowerCase();
-        }
-       };
+      } else if (keysArr[i].innerHTML.length === 1
+        && keysArr[i].innerHTML.toUpperCase() === keysArr[i].innerHTML) {
+        keysArr[i].innerHTML = keysArr[i].innerHTML.toLowerCase();
+      }
     }
-  })
-
-  keyboard.addEventListener('mousedown', function(event) {
-    if (event.target.id == 'CapsLock') {
-      for (let i = 0; i < keysArr.length; i++) {
-        if (keysArr[i].innerHTML.length == 1 && keysArr[i].innerHTML.toLowerCase() == keysArr[i].innerHTML) {
-        keysArr[i].innerHTML = keysArr[i].innerHTML.toUpperCase();
-        } else if (keysArr[i].innerHTML.length == 1 && keysArr[i].innerHTML.toUpperCase() == keysArr[i].innerHTML) {
-          keysArr[i].innerHTML = keysArr[i].innerHTML.toLowerCase();
-        }
-       };
-    }
-  });
+  }
+};
+document.addEventListener('keydown', keyAnimation);
+document.addEventListener('keyup', keyAnimation);
+keyboard.addEventListener('mousedown', keyAnimation);
+keyboard.addEventListener('mouseup', keyAnimation);
+document.addEventListener('keydown', changeLanguage);
+document.addEventListener('keydown', changeRegister);
+keyboard.addEventListener('mousedown', changeRegister);
+keyboard.addEventListener('mousedown', fillTextarea);
